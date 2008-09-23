@@ -10,4 +10,5 @@ ActionController::Base.append_view_path(File.join(File.dirname(__FILE__), "views
 
 models_path = File.join(directory, 'lib', 'models')
 $LOAD_PATH << models_path
-Dependencies.load_paths << models_path
+ActiveSupport::Dependencies.load_paths << models_path
+
