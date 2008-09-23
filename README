@@ -172,7 +172,7 @@ activities.  For example:
         assert_equal(activity.verb, 'now_follows')
       end
 
-You should be able to modify the views by copying the view directorys from 
+You should be able to modify the views by copying the view directories from 
 the plugin into your app/views directory.
 
 Copyright (c) 2008 Matson Systems, Inc.
