@@ -24,12 +24,20 @@ class ActivityStream < ActiveRecord::Base
       find(:all, :conditions => 
         {:actor_id => actor.id, 
         :actor_type => actor.class.name, 
-        :status => 0}, :order => "created_at DESC", :limit => limit)
+        :status => 0}, :order => "created_at DESC", :limit => limit,
+        :include => [:actor, :object])
 
     else
-      where = "where actor_id = ? AND actor_type = ? AND status = 0"
-      find_by_sql([self.find_recent_sql(where, limit), location.to_s, 
-        actor.id, actor.class.name])
+      # FIXME: We really want :include => [:actor, :object], however, when
+      # the "p.id" => nil condition prevents polymorphinc :include from working
+      find(:all, 
+        :joins => self.preference_join(location),
+        :conditions => {:actor_id => actor.id, 
+                        :actor_type => actor.class.name,
+                        :status => 0, 
+                        :"p.id" => nil },
+        :order => "created_at DESC",
+        :limit => limit)
     end
   end  
 
@@ -37,21 +45,26 @@ class ActivityStream < ActiveRecord::Base
   # the users activity_stream_preferences.  Please see the README
   # for a sample usage.
   def self.recent_objects(object, location, limit=12)
-    where = "where object_id = ? AND object_type = ? AND status = 0"
-      find_by_sql([self.find_recent_sql(where, limit), location.to_s, 
-          object.id, object.class.name])
+    # FIXME: We really want :include => [:actor, :object], however, when
+    # the "p.id" => nil condition prevents polymorphinc :include from working
+    find(:all, 
+      :joins => self.preference_join(location),
+      :conditions => {:object_id => object.id, 
+                      :object_type => object.class.name,
+                      :status => 0, 
+                      :"p.id" => nil },
+      :order => "created_at DESC",
+      :limit => limit)
   end  
 
-  def self.find_recent_sql(where, limit) # :nodoc:
-      "SELECT a.* FROM activity_streams a 
-        LEFT OUTER JOIN activity_stream_preferences p \
-          ON #{ACTIVITY_STREAM_USER_MODEL_ID} = actor_id  \
-            AND actor_type = '#{ACTIVITY_STREAM_USER_MODEL}'  \
-            AND a.activity = p.activity \
-            AND location = ?  \
-        #{where} \
-        AND p.id IS NULL \
-      ORDER BY a.created_at DESC LIMIT #{limit}"
+  def self.preference_join(location) # :nodoc:
+    # location is not tainted as it is a symbol from
+    # the code
+    "LEFT OUTER JOIN activity_stream_preferences p \
+      ON #{ACTIVITY_STREAM_USER_MODEL_ID} = actor_id  \
+      AND actor_type = '#{ACTIVITY_STREAM_USER_MODEL}'  \
+      AND activity_streams.activity = p.activity \
+      AND location = '#{location.to_s}'"
   end
 
   # Soft Delete in as some activites are necessary for site stats
