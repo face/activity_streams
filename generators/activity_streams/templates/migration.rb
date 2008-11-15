@@ -40,7 +40,7 @@ class CreateActivityStreams < ActiveRecord::Migration
       t.timestamps
     end
     add_index :activity_stream_totals, [:activity, :object_id, 
-      :object_type], :name => :activity_stream_totals
+      :object_type], :name => :activity_stream_totals_idx
 
     create_table :activity_stream_preferences do |t|
       t.string :activity
@@ -50,7 +50,7 @@ class CreateActivityStreams < ActiveRecord::Migration
       t.timestamps
     end
     add_index :activity_stream_preferences, [:activity, :<%= user_model_id %>],
-      :name => :activity_stream_preferences
+      :name => :activity_stream_preferences_idx
 
   end
 
