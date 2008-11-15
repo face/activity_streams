@@ -12,7 +12,7 @@ models_path = File.join(directory, 'lib', 'models')
 $LOAD_PATH << models_path
 if Rails::VERSION::MAJOR >= 2 && 
    Rails::VERSION::MINOR >= 1 && 
-   Rails::VERSION::TINY > 0
+   Rails::VERSION::TINY >= 0
   ActiveSupport::Dependencies.load_paths << models_path
 else
   Dependencies.load_paths << models_path
