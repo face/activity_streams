@@ -2,7 +2,7 @@
 this_url = "http://#{request.host_with_port}/feeds/your_activities/#{@user.activity_stream_token}"
 
 atom_feed(:url => this_url) do |feed|
-  feed.title("#{@user.send(ACTIVITY_STREAM_USER_MODEL_NAME)}'s Activity Stream")
+  feed.title("#{ACTIVITY_STREAM_SERVICE_STRING}: Activity Stream for #{@user.send(ACTIVITY_STREAM_USER_MODEL_NAME)}")
   feed.updated(@activity_streams.first ? @activity_streams.first.created_at : Time.now.utc)
 
   for activity_stream in @activity_streams

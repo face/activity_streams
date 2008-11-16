@@ -49,7 +49,7 @@ module LogActivityStreams
 
     return unless action == self.action_name.to_sym
 
-    return if !flash[:error].blank? || !logged_in?
+    return if !flash[:error].blank? || !logged_in? || @suppress_activity_stream
 
     status = options[:status] || 0
 
@@ -65,6 +65,15 @@ module LogActivityStreams
     end
     actors = [ actors ] unless actors.is_a? Array
     objects = [ objects ] unless objects.is_a? Array
+
+
+    if indirect_object_method = options[:indirect_object]
+      if indirect_object_method.to_s.start_with?('@')
+        indirect_object = self.instance_variable_get(indirect_object_method)
+      else
+        indirect_object = self.send(indirect_object_method)
+      end
+    end
 
     actors.each do |actor|
       objects.each do |object|
@@ -88,6 +97,11 @@ module LogActivityStreams
           activity_stream.object = object
           activity_stream.object_name_method = object_name.to_s
           activity_stream.status = status
+          if indirect_object
+            activity_stream.indirect_object = indirect_object
+            activity_stream.indirect_object_name_method = options[:indirect_object_name_method].to_s
+            activity_stream.indirect_object_phrase = options[:indirect_object_phrase]
+          end
         end
 
         activity_stream.save!

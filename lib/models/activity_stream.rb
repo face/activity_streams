@@ -14,6 +14,7 @@ class ActivityStream < ActiveRecord::Base
 
   belongs_to :actor, :polymorphic => true
   belongs_to :object, :polymorphic => true
+  belongs_to :indirect_object, :polymorphic => true
 
   # Finds the recent activities for a given actor, and honors
   # the users activity_stream_preferences.  Please see the README
@@ -25,7 +26,7 @@ class ActivityStream < ActiveRecord::Base
         {:actor_id => actor.id, 
         :actor_type => actor.class.name, 
         :status => 0}, :order => "created_at DESC", :limit => limit,
-        :include => [:actor, :object])
+        :include => [:actor, :object, :indirect_object])
 
     else
       # FIXME: We really want :include => [:actor, :object], however, when

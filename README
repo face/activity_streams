@@ -66,6 +66,19 @@ want to log activities.  For example:
         {:total => -1 }
 
       #...
+    end
+
+And an example with an idirect object:
+
+    class Posts < ApplicationController
+      log_activity_streams :current_user, :friendly_name, :posted,
+        :@post, :activity_title, :create, :posted_message,
+        {:indirect_object => :forum_owner,
+        :indirect_object_name_method => :title,
+        :indirect_object_phrase => 'about indirect_object' }
+
+      #...
+    end
 
 The arguments for log activity stream are
     

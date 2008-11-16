@@ -21,10 +21,11 @@ module ActivityStreamPreferencesModule
 
     build_activities_hash
 
-    @user = ACTIVITY_STREAM_USER_CLASS.find(@user_id)
+    klass = Object::const_get(ACTIVITY_STREAM_USER_MODEL)
+    @user = klass.find(@user_id)
     if @user.activity_stream_token.blank?
-      @user.activity_stream_token = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
-      @user.save(false)
+      @user.update_attribute(:activity_stream_token,
+        Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join ))
       if @user.id == self.current_user.id
         self.current_user.reload
       end

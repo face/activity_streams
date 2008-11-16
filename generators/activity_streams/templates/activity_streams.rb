@@ -21,6 +21,5 @@ ACTIVITY_STREAM_LOCATIONS = {
     :feed_location => 'Your Activity Stream Atom Feed' }
 
 ACTIVITY_STREAM_USER_MODEL='<%= user_model %>'
-ACTIVITY_STREAM_USER_CLASS=<%= user_model %>
 ACTIVITY_STREAM_USER_MODEL_ID='<%= user_model_id %>'
 ACTIVITY_STREAM_USER_MODEL_NAME='friendly_name'

@@ -99,7 +99,8 @@ module ActivityStreamsModule
 
   def feed
 
-    @user = ACTIVITY_STREAM_USER_CLASS.find_by_activity_stream_token params[:activity_stream_token] unless params[:activity_stream_token].blank?
+    klass = Object::const_get(ACTIVITY_STREAM_USER_MODEL)
+    @user = klass.find_by_activity_stream_token params[:activity_stream_token] unless params[:activity_stream_token].blank?
 
     render :nothing => true and return if @user.nil?
 
