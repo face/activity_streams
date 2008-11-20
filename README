@@ -68,7 +68,7 @@ want to log activities.  For example:
       #...
     end
 
-And an example with an idirect object:
+And an example with an indirect object:
 
     class Posts < ApplicationController
       log_activity_streams :current_user, :friendly_name, :posted,
