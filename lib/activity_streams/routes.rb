@@ -13,8 +13,8 @@ class ActionController::Routing::RouteSet # :nodoc:
     activity_stream_maps(mapper) 
 
     yield mapper
-
-    named_routes.install
+		
+    install_helpers
   end
 
   def activity_stream_maps(map) # :nodoc:
