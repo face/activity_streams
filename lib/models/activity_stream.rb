@@ -30,7 +30,7 @@ class ActivityStream < ActiveRecord::Base
 
     else
       # FIXME: We really want :include => [:actor, :object], however, when
-      # the "p.id" => nil condition prevents polymorphinc :include from working
+      # the "p.id" => nil condition prevents polymorphic :include from working
       find(:all, 
         :joins => self.preference_join(location),
         :conditions => [
@@ -46,7 +46,7 @@ class ActivityStream < ActiveRecord::Base
   # for a sample usage.
   def self.recent_objects(object, location, limit=12)
     # FIXME: We really want :include => [:actor, :object], however, when
-    # the "p.id" => nil condition prevents polymorphinc :include from working
+    # the "p.id" => nil condition prevents polymorphic :include from working
     find(:all, 
       :joins => self.preference_join(location),
       :conditions => [
