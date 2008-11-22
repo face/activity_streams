@@ -33,10 +33,9 @@ class ActivityStream < ActiveRecord::Base
       # the "p.id" => nil condition prevents polymorphinc :include from working
       find(:all, 
         :joins => self.preference_join(location),
-        :conditions => {:actor_id => actor.id, 
-                        :actor_type => actor.class.name,
-                        :status => 0, 
-                        :"p.id" => nil },
+        :conditions => [
+          'actor_id = ? and actor_type = ? and status = ? and p.id IS NULL',
+          actor.id, actor.class.name, 0 ],
         :order => "created_at DESC",
         :limit => limit)
     end
@@ -50,10 +49,9 @@ class ActivityStream < ActiveRecord::Base
     # the "p.id" => nil condition prevents polymorphinc :include from working
     find(:all, 
       :joins => self.preference_join(location),
-      :conditions => {:object_id => object.id, 
-                      :object_type => object.class.name,
-                      :status => 0, 
-                      :"p.id" => nil },
+      :conditions => [
+          "object_id = ? and object_type = ? and status = ? and p.id IS NULL", 
+          object.id, object.class.name, 0 ],
       :order => "created_at DESC",
       :limit => limit)
   end  
