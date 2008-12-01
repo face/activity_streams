@@ -37,7 +37,7 @@ module LogActivityStreams
   #        <%= render :partial => 'activity_streams/activity_stream', :collection => ActivityStream.recent_actors(@user, activity_stream_location)  %>
   #
   def activity_stream_location
-    if current_user == :false || current_user == false
+    if not logged_in? 
       :public_location 
     else
       :logged_in_location
