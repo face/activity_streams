@@ -18,9 +18,13 @@ class CreateActivityStreams < ActiveRecord::Migration
       t.string :actor_type
       t.string :actor_name_method               # Method on the actor model
       t.integer :count, :default => 1           # Count
-      t.integer :object_id                      # Polymorphinc social object
+      t.integer :object_id                      # Polymorphic social object
       t.string :object_type
       t.string :object_name_method              # Method on the object name
+      t.integer :indirect_object_id
+      t.string :indirect_object_type            # Polymorphic indirect object
+      t.string :indirect_object_name_method
+      t.string :indirect_object_phrase
       t.integer :status, :default =>0    # 0=public;1=debug;2=internal;5=deleted
 
       t.timestamps
@@ -30,6 +34,8 @@ class CreateActivityStreams < ActiveRecord::Migration
       :name => :activity_streams_by_actor
     add_index :activity_streams, [:object_id, :object_type],
       :name => :activity_streams_by_object
+    add_index :activity_streams, [:indirect_object_id, :indirect_object_type],
+      :name => :activity_streams_by_indirect_object
 
     create_table :activity_stream_totals do |t|
       t.string :activity
