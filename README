@@ -5,6 +5,7 @@ ActivityStreams is a Rails Plug-in providing a customizable framework
 for cataloging and publishing user activity and social objects.
 
 Developed and tested on Rails 2.1
+Tested on Rails 2.3.10
 
 Example
 =======
@@ -15,11 +16,15 @@ Example
 
 The only option is the name of the model that holds your User.
 
-2) Run the migration
+2) Add the Routes, in routes.rb
+
+   map.activity_streams
+
+3) Run the migration
        
        rake db:migrate
 
-3)   Edit ./config/initializers/activity_streams.rb.   Here you
+4)   Edit ./config/initializers/activity_streams.rb.   Here you
 must define your on list of ACTIVITY_STREAM_ACTIVITIES.
 ACTIVITY_STREAM_ACTIVITIES are a hash of activities used on the
 entire site.   ACTIVITY_STREAM_ACTIVITIES are a grouping of activities
@@ -36,7 +41,7 @@ need changing.  However, set ACTIVITY_STREAM_USER_MODEL_NAME to be
 the method of your user model the returns a friendly name (like
 "firstname lastname").
 
-4) Edit application controller and include the activity logger:
+5) Edit application controller and include the activity logger:
 
     class ApplicationController < ActionController::Base
 
@@ -45,7 +50,7 @@ the method of your user model the returns a friendly name (like
       #...
 
 
-5) Add logging calls to each controller for all the actions you
+6) Add logging calls to each controller for all the actions you
 want to log activities.  For example:
 
     class FeedsController < ApplicationController
@@ -109,7 +114,7 @@ The arguments for log activity stream are
     or method.
 
 
-6) Display a stream in one of your views. For example, from 
+7) Display a stream in one of your views. For example, from 
 ./app/views/users/show.html.erb:
    <h3>Recent Activity</h3>
 
@@ -119,7 +124,7 @@ The arguments for log activity stream are
 
    </div> <!-- hfeed -->
 
-7) Define the required methods.  The plug-in needs to know the current logged in user and if that user is an admin.   So the following methods must be defined.
+8) Define the required methods.  The plug-in needs to know the current logged in user and if that user is an admin.   So the following methods must be defined.
 
   a) The User model needs an "admin?" method
 

@@ -5,22 +5,17 @@
 #++
 # routes.rb adds additional routes for ActivityStreamsModule
 #
-class ActionController::Routing::RouteSet # :nodoc:
-  def draw # :nodoc:
-    clear! 
-    mapper = Mapper.new(self) 
-
-    activity_stream_maps(mapper) 
-
-    yield mapper
-		
-    install_helpers
+module ActivityStreams #:nodoc:
+  module Routing #:nodoc:
+    module MapperExtensions
+      def activity_streams
+          @set.add_named_route('your_activities', '/feeds/your_activities/:activity_stream_token', :controller => 'activity_streams', :action => 'feed', :format => 'atom')
+          resources :activity_stream_preferences
+          resources :activity_streams
+      end
+    end
   end
-
-  def activity_stream_maps(map) # :nodoc:
-    map.your_activities '/feeds/your_activities/:activity_stream_token', :controller => 'activity_streams', :action => 'feed', :format => 'atom'
-    map.resources :activity_stream_preferences
-    map.resources :activity_streams
-  end
-
 end
+
+ActionController::Routing::RouteSet::Mapper.send :include, ActivityStreams::Routing::MapperExtensions
+
